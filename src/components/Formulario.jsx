@@ -23,7 +23,7 @@ const Formulario = ({ setEstado, idMetro }) => {
             alert.show('El registro se actualizo con éxito :3'); // Mostrar alerta
             setTimeout(() => {
                 window.location.reload(); // Recargar la página después de mostrar la alerta
-            }, 3000);
+            }, 2000);
         }
     }, [recargar])
     
@@ -96,6 +96,7 @@ const Formulario = ({ setEstado, idMetro }) => {
                     setMensaje(false);
                     setEstado(false);
                     alert.show('Registro exitoso'); // Mostrar alerta
+                    setRecargar(true)
                     setForm({});
                 }, 1000);
             }
