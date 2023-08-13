@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Mensajes from "./Mensajes";
 
 const Formulario = ({ setEstado, idMetro }) => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm();
 
     const [error, setError] = useState(false);
     const [mensaje, setMensaje] = useState(false);
@@ -19,7 +19,7 @@ const Formulario = ({ setEstado, idMetro }) => {
     });
     useEffect(() => {
         if (recargar) {
-            window.location.reload(); // Recargar la página si shouldReload es verdadero
+            window.location.reload(); // Recargar la página si recargar es verdadero
         }
     }, [recargar])
 
@@ -31,29 +31,36 @@ const Formulario = ({ setEstado, idMetro }) => {
                     const respuesta = await fetch(`https://64d01a7dffcda80aff526884.mockapi.io/metro/${idMetro}`);
                     const data = await respuesta.json();
                     setForm(data);
+                    Object.keys(data).forEach(key => {
+                        setValue(key, data[key]);
+                    });
                 } catch (error) {
                     console.log(error);
                 }
             })();
         }
-    }, [idMetro]);
+    }, [idMetro, setValue]);
 
     const handleChange = (e) => {
         setForm({
             ...form,
-            [e.target.name]: e.target.value.trim()
+            [e.target.name]: e.target.value
         });
     }
 
-    const onSubmit = async (data) => {
-        if (Object.values(form).includes("") || Object.entries(form).length === 0) {
+    const onSubmit = async () => {
+
+        // Comprobar si hay errores en los campos del formulario
+
+        if (Object.values(form).includes("")) {
             setError(true);
             setTimeout(() => {
                 setError(false);
             }, 1000);
             return;
         }
-//cometarios
+
+        //cometarios
         try {
             if (form.id) {
                 const url = `https://64d01a7dffcda80aff526884.mockapi.io/metro/${form.id}`;
@@ -63,13 +70,14 @@ const Formulario = ({ setEstado, idMetro }) => {
                     headers: { 'Content-Type': 'application/json' }
                 });
                 setEstado(true);
-                setForm({});
+                setMensaje(true);
                 setTimeout(() => {
+                    setMensaje(false);
+                    setRecargar(true)
                     setEstado(false);
-                    setRecargar(true);
-                    setForm({});
                 }, 1000);
-            } else {
+            }
+            else {
                 const url = "https://64d01a7dffcda80aff526884.mockapi.io/metro/";
                 form.id = uuidv4();
                 await fetch(url, {
@@ -106,17 +114,19 @@ const Formulario = ({ setEstado, idMetro }) => {
             <div>
                 <label className='text-gray-700 uppercase font-bold text-sm'>Nombre: </label>
                 <input
+                    id='nombre'
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     type="text"
                     {...register('nombre', {
                         required: true,
-                        maxLength: 10,
-                        pattern: /^[A-Za-z]+$/
+                        maxLength: 20,
+                        pattern: /^(?!\s*$)[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s!@#$%^&*()_+=[\]{}|;:'",<.>?/~`-]+$/
                     })}
-                    value={form.nombre}
+                    
+                    value={form.nombre || ""}
                     onChange={handleChange}
                 />
-                {errors.nombre?.type === 'required' && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
+                {errors.nombre?.type === 'required' && form.nombre === "" && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
                 {errors.nombre?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 10</small>}
                 {errors.nombre?.type === 'pattern' && <small style={{ color: 'red' }}>Solo se permiten letras</small>}
             </div>
@@ -124,23 +134,26 @@ const Formulario = ({ setEstado, idMetro }) => {
             <div>
                 <label className='text-gray-700 uppercase font-bold text-sm'>Sector: </label>
                 <input
+                    id='sector'
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     type="text"
                     {...register('sector', {
                         required: true,
                         maxLength: 10,
-                        pattern: /^[A-Za-z]+$/
+                        pattern: /^[A-Za-z0-9]+$/
                     })}
-                    value={form.sector}
+                    value={form.sector || ""}
                     onChange={handleChange}
                 />
-                {errors.sector?.type === 'required' && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
+                {errors.sector?.type === 'required' && form.sector === "" && <small style={{ color: 'red' }}>El campo no puede estar vacío</small>}
                 {errors.sector?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 10</small>}
                 {errors.sector?.type === 'pattern' && <small style={{ color: 'red' }}>Solo se permiten letras</small>}
             </div>
 
+
             <div>
-                <label className='text-gray-700 uppercase font-bold text-sm'>Punto de salida: </label>
+                <label htmlFor='salida'
+                    className='text-gray-700 uppercase font-bold text-sm'>Punto de salida: </label>
                 <input
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     type="text"
@@ -149,16 +162,17 @@ const Formulario = ({ setEstado, idMetro }) => {
                         maxLength: 10,
                         pattern: /^[A-Za-z]+$/
                     })}
-                    value={form.salida}
+                    value={form.salida || ""}
                     onChange={handleChange}
                 />
-                {errors.salida?.type === 'required' && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
+                {errors.salida?.type === 'required' && form.salida === "" && <small style={{ color: 'red' }}>El campo no puede estar vacío</small>}
                 {errors.salida?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 10</small>}
                 {errors.salida?.type === 'pattern' && <small style={{ color: 'red' }}>Solo se permiten letras</small>}
             </div>
 
             <div>
-                <label className='text-gray-700 uppercase font-bold text-sm'>Punto de llegada: </label>
+                <label htmlFor='llegada'
+                    className='text-gray-700 uppercase font-bold text-sm'>Punto de llegada: </label>
                 <input
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     type="text"
@@ -167,17 +181,18 @@ const Formulario = ({ setEstado, idMetro }) => {
                         maxLength: 10,
                         pattern: /^[A-Za-z]+$/
                     })}
-                    value={form.llegada}
+                    value={form.llegada || ""}
                     onChange={handleChange}
                 />
-                {errors.llegada?.type === 'required' && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
+                {errors.llegada?.type === 'required' && form.llegada === "" && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
                 {errors.llegada?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 10</small>}
                 {errors.llegada?.type === 'pattern' && <small style={{ color: 'red' }}>Solo se permiten letras</small>}
             </div>
 
 
             <div>
-                <label className='text-gray-700 uppercase font-bold text-sm'>NOMBRE DEL MAQUINISTA: </label>
+                <label htmlFor='maquinista'
+                    className='text-gray-700 uppercase font-bold text-sm'>NOMBRE DEL MAQUINISTA: </label>
                 <input
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     type="text"
@@ -186,17 +201,18 @@ const Formulario = ({ setEstado, idMetro }) => {
                         maxLength: 10,
                         pattern: /^[A-Za-z]+$/
                     })}
-                    value={form.maquinista}
+                    value={form.maquinista || ""}
                     onChange={handleChange}
                 />
-                {errors.maquinista?.type === 'required' && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
+                {errors.maquinista?.type === 'required' && form.maquinista === "" && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
                 {errors.maquinista?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 10</small>}
                 {errors.maquinista?.type === 'pattern' && <small style={{ color: 'red' }}>Solo se permiten letras</small>}
             </div>
 
 
             <div>
-                <label className='text-gray-700 uppercase font-bold text-sm'>DETALLES: </label>
+                <label htmlFor='detalles'
+                    className='text-gray-700 uppercase font-bold text-sm'>DETALLES: </label>
                 <textarea
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     type="text"
@@ -205,10 +221,10 @@ const Formulario = ({ setEstado, idMetro }) => {
                         maxLength: 10,
                         pattern: /^[A-Za-z]+$/
                     })}
-                    value={form.detalles}
+                    value={form.detalles || ""}
                     onChange={handleChange}
                 />
-                {errors.detalles?.type === 'required' && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
+                {errors.detalles?.type === 'required' && form.detalles === "" && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
                 {errors.detalles?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 10</small>}
                 {errors.detalles?.type === 'pattern' && <small style={{ color: 'red' }}>Solo se permiten letras</small>}
             </div>
