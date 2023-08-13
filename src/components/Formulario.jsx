@@ -125,7 +125,7 @@ const Formulario = ({ setEstado, idMetro }) => {
                     type="text"
                     {...register('nombre', {
                         required: true,
-                        maxLength: 20,
+                        maxLength: 25,
                         pattern: /^(?!\s*$)[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s!@#$%^&*()_+=[\]{}|;:'",<.>?/~`-]+$/
                     })}
                     
@@ -133,7 +133,7 @@ const Formulario = ({ setEstado, idMetro }) => {
                     onChange={handleChange}
                 />
                 {errors.nombre?.type === 'required' && form.nombre === "" && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
-                {errors.nombre?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 10</small>}
+                {errors.nombre?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 25</small>}
                 {errors.nombre?.type === 'pattern' && <small style={{ color: 'red' }}>Solo se permiten letras</small>}
             </div>
 
@@ -145,14 +145,14 @@ const Formulario = ({ setEstado, idMetro }) => {
                     type="text"
                     {...register('sector', {
                         required: true,
-                        maxLength: 10,
-                        pattern: /^[A-Za-z0-9]+$/
+                        maxLength: 25,
+                        pattern: /^(?!\s*$)[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s!@#$%^&*()_+=[\]{}|;:'",<.>?/~`-]+$/
                     })}
                     value={form.sector || ""}
                     onChange={handleChange}
                 />
                 {errors.sector?.type === 'required' && form.sector === "" && <small style={{ color: 'red' }}>El campo no puede estar vacío</small>}
-                {errors.sector?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 10</small>}
+                {errors.sector?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 25</small>}
                 {errors.sector?.type === 'pattern' && <small style={{ color: 'red' }}>Solo se permiten letras</small>}
             </div>
 
@@ -165,14 +165,14 @@ const Formulario = ({ setEstado, idMetro }) => {
                     type="text"
                     {...register('salida', {
                         required: true,
-                        maxLength: 10,
-                        pattern: /^[A-Za-z]+$/
+                        maxLength: 25,
+                        pattern: /^(?!\s*$)[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s!@#$%^&*()_+=[\]{}|;:'",<.>?/~`-]+$/
                     })}
                     value={form.salida || ""}
                     onChange={handleChange}
                 />
                 {errors.salida?.type === 'required' && form.salida === "" && <small style={{ color: 'red' }}>El campo no puede estar vacío</small>}
-                {errors.salida?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 10</small>}
+                {errors.salida?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 25</small>}
                 {errors.salida?.type === 'pattern' && <small style={{ color: 'red' }}>Solo se permiten letras</small>}
             </div>
 
@@ -184,14 +184,14 @@ const Formulario = ({ setEstado, idMetro }) => {
                     type="text"
                     {...register('llegada', {
                         required: true,
-                        maxLength: 10,
-                        pattern: /^[A-Za-z]+$/
+                        maxLength: 25,
+                        pattern: /^(?!\s*$)[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s!@#$%^&*()_+=[\]{}|;:'",<.>?/~`-]+$/
                     })}
                     value={form.llegada || ""}
                     onChange={handleChange}
                 />
                 {errors.llegada?.type === 'required' && form.llegada === "" && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
-                {errors.llegada?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 10</small>}
+                {errors.llegada?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 25</small>}
                 {errors.llegada?.type === 'pattern' && <small style={{ color: 'red' }}>Solo se permiten letras</small>}
             </div>
 
@@ -204,14 +204,14 @@ const Formulario = ({ setEstado, idMetro }) => {
                     type="text"
                     {...register('maquinista', {
                         required: true,
-                        maxLength: 10,
-                        pattern: /^[A-Za-z]+$/
+                        maxLength: 25,
+                        pattern: /^(?!\s*$)[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s!@#$%^&*()_+=[\]{}|;:'",<.>?/~`-]+$/
                     })}
                     value={form.maquinista || ""}
                     onChange={handleChange}
                 />
                 {errors.maquinista?.type === 'required' && form.maquinista === "" && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
-                {errors.maquinista?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 10</small>}
+                {errors.maquinista?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 25</small>}
                 {errors.maquinista?.type === 'pattern' && <small style={{ color: 'red' }}>Solo se permiten letras</small>}
             </div>
 
@@ -224,14 +224,14 @@ const Formulario = ({ setEstado, idMetro }) => {
                     type="text"
                     {...register('detalles', {
                         required: true,
-                        maxLength: 10,
-                        pattern: /^[A-Za-z]+$/
+                        maxLength: 25,
+                        pattern: /^(?!\s*$)[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s!@#$%^&*()_+=[\]{}|;:'",<.>?/~`-]+$/
                     })}
                     value={form.detalles || ""}
                     onChange={handleChange}
                 />
                 {errors.detalles?.type === 'required' && form.detalles === "" && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
-                {errors.detalles?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 10</small>}
+                {errors.detalles?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 25</small>}
                 {errors.detalles?.type === 'pattern' && <small style={{ color: 'red' }}>Solo se permiten letras</small>}
             </div>
 
