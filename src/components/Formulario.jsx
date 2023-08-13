@@ -8,6 +8,7 @@ const Formulario = ({ setEstado, idMetro }) => {
 
     const [error, setError] = useState(false);
     const [mensaje, setMensaje] = useState(false);
+    const [recargar, setRecargar] = useState(false);
     const [form, setForm] = useState({
         nombre: "",
         sector: "",
@@ -16,6 +17,12 @@ const Formulario = ({ setEstado, idMetro }) => {
         maquinista: "",
         detalles: ""
     });
+    useEffect(() => {
+        if (recargar) {
+            window.location.reload(); // Recargar la página si shouldReload es verdadero
+        }
+    }, [recargar])
+
 
     useEffect(() => {
         if (idMetro) {
@@ -46,7 +53,7 @@ const Formulario = ({ setEstado, idMetro }) => {
             }, 1000);
             return;
         }
-
+//cometarios
         try {
             if (form.id) {
                 const url = `https://64d01a7dffcda80aff526884.mockapi.io/metro/${form.id}`;
@@ -59,6 +66,7 @@ const Formulario = ({ setEstado, idMetro }) => {
                 setForm({});
                 setTimeout(() => {
                     setEstado(false);
+                    setRecargar(true);
                     setForm({});
                 }, 1000);
             } else {
