@@ -27,7 +27,7 @@ function App() {
 
       <main className='container mx-auto flex gap-5 flex-wrap justify-center p-3 lg:flex-nowrap '>
 
-        <div className='bg-celeste w-full m-3 p-5 shadow-lg rounded-lg lg:w-1/2 dark:border-2 border-sky-900'>
+        <div className='bg-white w-full m-3 p-5 shadow-lg rounded-lg lg:w-1/2 dark:border-2 border-sky-900'>
           <div className="flex items-center space-x-10">
             <hr className="w-80 border border-gray-400" />
             <div className="sm:w-40 font-semibold text-gray-600 w-full text-center">Crear rutas</div>
