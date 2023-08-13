@@ -1,10 +1,11 @@
+import { useAlert } from 'react-alert'
 import logoMetro from '../assets/tren.webp'
 import Mensajes from './Mensajes'
 import { useState } from "react"
 import { useEffect } from 'react'
 
 const Listar = ({ estado,setIdmetro }) => {
-
+    const alert = useAlert()
     const [rutas, setRutas] = useState([])
 //Funcion autoejecutable
     useEffect(() => {
@@ -33,6 +34,7 @@ const Listar = ({ estado,setIdmetro }) => {
                 await fetch(url, {
                     method: 'DELETE',
                 })
+                alert.show('El registro se elimino con éxito'); // Mostrar alerta
                 const nuevasRutas = rutas.filter(ruta => ruta.id !== id)
                 setRutas(nuevasRutas)
             }

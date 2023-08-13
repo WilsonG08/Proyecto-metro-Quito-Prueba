@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from 'uuid';
 import Mensajes from "./Mensajes";
+import { useAlert } from 'react-alert'
 
 const Formulario = ({ setEstado, idMetro }) => {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
-
+    const alert = useAlert()
     const [error, setError] = useState(false);
     const [mensaje, setMensaje] = useState(false);
     const [recargar, setRecargar] = useState(false);
@@ -19,9 +20,13 @@ const Formulario = ({ setEstado, idMetro }) => {
     });
     useEffect(() => {
         if (recargar) {
-            window.location.reload(); // Recargar la página si recargar es verdadero
+            alert.show('El registro se actualizo con éxito :3'); // Mostrar alerta
+            setTimeout(() => {
+                window.location.reload(); // Recargar la página después de mostrar la alerta
+            }, 3000);
         }
     }, [recargar])
+    
 
 
     useEffect(() => {
@@ -90,6 +95,7 @@ const Formulario = ({ setEstado, idMetro }) => {
                 setTimeout(() => {
                     setMensaje(false);
                     setEstado(false);
+                    alert.show('Registro exitoso'); // Mostrar alerta
                     setForm({});
                 }, 1000);
             }
