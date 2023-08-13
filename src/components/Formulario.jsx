@@ -115,8 +115,8 @@ const Formulario = ({ setEstado, idMetro }) => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            {error && <Mensajes tipo="bg-red-900">"Existen campos vacíos"</Mensajes>}
-            {mensaje && <Mensajes tipo="bg-green-900">"Registro exitoso"</Mensajes>}
+            {/* {error && <Mensajes tipo="bg-red-900">"Existen campos vacíos"</Mensajes>}
+            {mensaje && <Mensajes tipo="bg-green-900">"Registro exitoso"</Mensajes>} */}
 
             <div>
                 <label className='text-gray-700 uppercase font-bold text-sm'>Nombre: </label>
