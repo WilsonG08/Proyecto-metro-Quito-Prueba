@@ -20,7 +20,6 @@ const Formulario = ({ setEstado, idMetro }) => {
     });
     useEffect(() => {
         if (recargar) {
-            alert.show('El registro se actualizo con éxito :3'); // Mostrar alerta
             setTimeout(() => {
                 window.location.reload(); // Recargar la página después de mostrar la alerta
             }, 2000);
@@ -78,6 +77,7 @@ const Formulario = ({ setEstado, idMetro }) => {
                 setMensaje(true);
                 setTimeout(() => {
                     setMensaje(false);
+                    alert.show('El registro se actualizo con éxito :3'); // Mostrar alerta
                     setRecargar(true)
                     setEstado(false);
                 }, 1000);
