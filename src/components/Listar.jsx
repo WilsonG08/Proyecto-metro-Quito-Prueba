@@ -78,4 +78,4 @@ const Listar = ({ estado,setIdmetro }) => {
     )
 }
 
-export default Listar
+export default withAlert()(Listar);
