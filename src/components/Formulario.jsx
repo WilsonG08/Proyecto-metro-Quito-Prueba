@@ -246,4 +246,4 @@ const Formulario = ({ setEstado, idMetro }) => {
     );
 }
 
-export default withAlert()(Formulario);
+export default Formulario;
