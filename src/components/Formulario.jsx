@@ -9,6 +9,8 @@ const Formulario = ({ setEstado, idMetro }) => {
     const alert = useAlert()
     const [error, setError] = useState(false);
     const [mensaje, setMensaje] = useState(false);
+    const [cancelar, setCancelar] = useState(false);
+    const [metroBd, setMetroBd] = useState();
     const [recargar, setRecargar] = useState(false);
     const [form, setForm] = useState({
         nombre: "",
@@ -25,7 +27,7 @@ const Formulario = ({ setEstado, idMetro }) => {
             }, 2000);
         }
     }, [recargar])
-    
+
 
 
     useEffect(() => {
@@ -33,6 +35,7 @@ const Formulario = ({ setEstado, idMetro }) => {
             (async function () {
                 try {
                     const respuesta = await fetch(`https://64d01a7dffcda80aff526884.mockapi.io/metro/${idMetro}`);
+                    setMetroBd(respuesta);
                     const data = await respuesta.json();
                     setForm(data);
                     Object.keys(data).forEach(key => {
@@ -67,6 +70,8 @@ const Formulario = ({ setEstado, idMetro }) => {
         //cometarios
         try {
             if (form.id) {
+                setCancelar(true);
+                console.log("SOY METRO", metroBd)
                 const url = `https://64d01a7dffcda80aff526884.mockapi.io/metro/${form.id}`;
                 await fetch(url, {
                     method: 'PUT',
@@ -87,7 +92,7 @@ const Formulario = ({ setEstado, idMetro }) => {
                 form.id = uuidv4();
                 await fetch(url, {
                     method: 'POST',
-                    body: JSON.stringify(form),
+                    body: JSON.stringify(form).trim(),
                     headers: { 'Content-Type': 'application/json' }
                 });
                 setMensaje(true);
@@ -127,7 +132,6 @@ const Formulario = ({ setEstado, idMetro }) => {
                     {...register('nombre', {
                         required: true,
                         maxLength: 25,
-                        pattern: /^(?!\s*$)[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s!@#$%^&*()_+=[\]{}|;:'",<.>?/~`-]+$/
                     })}
                     
                     value={form.nombre || ""}
@@ -135,7 +139,7 @@ const Formulario = ({ setEstado, idMetro }) => {
                 />
                 {errors.nombre?.type === 'required' && form.nombre === "" && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
                 {errors.nombre?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 25</small>}
-                {errors.nombre?.type === 'pattern' && <small style={{ color: 'red' }}>Solo se permiten letras</small>}
+                {errors.nombre?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 25</small>}
             </div>
 
             <div>
@@ -205,14 +209,14 @@ const Formulario = ({ setEstado, idMetro }) => {
                     type="text"
                     {...register('maquinista', {
                         required: true,
-                        maxLength: 25,
+                        maxLength: 100,
                         pattern: /^(?!\s*$)[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s!@#$%^&*()_+=[\]{}|;:'",<.>?/~`-]+$/
                     })}
                     value={form.maquinista || ""}
                     onChange={handleChange}
                 />
                 {errors.maquinista?.type === 'required' && form.maquinista === "" && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
-                {errors.maquinista?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 25</small>}
+                {errors.maquinista?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 100</small>}
                 {errors.maquinista?.type === 'pattern' && <small style={{ color: 'red' }}>Solo se permiten letras</small>}
             </div>
 
@@ -236,12 +240,40 @@ const Formulario = ({ setEstado, idMetro }) => {
                 {errors.detalles?.type === 'pattern' && <small style={{ color: 'red' }}>Solo se permiten letras</small>}
             </div>
 
-            <input
-                type="submit"
-                className='bg-sky-900 w-full p-3 
-                text-white uppercase font-bold rounded-lg 
-                hover:bg-red-900 cursor-pointer transition-all'
-                value={form.id ? "Actualizar ruta" : "Registrar ruta"} />
+            <div className="mt-4 flex justify-between gap-4"> {/* Agregar margen superior y flex para alinear los botones */}
+                <input
+                    type="submit"
+                    className='bg-sky-900 w-1/2 p-3
+            text-white uppercase font-bold rounded-lg
+            hover:bg-blue-700 cursor-pointer transition-all'
+                    value={form.id ? "Actualizar ruta" : "Registrar ruta"} />
+
+                <input
+                    type="button"
+                    className='bg-red-500 w-1/2 p-3
+            text-white uppercase font-bold rounded-lg
+            hover:bg-red-700 cursor-pointer transition-all'
+                    value={form.id ? "Cancelar" : "Borrrar"}
+                    onClick={() => {
+                        form.id ? (setForm({
+                            nombre: "",
+                            sector: "",
+                            salida: "",
+                            llegada: "",
+                            maquinista: "",
+                            detalles: ""
+                        }), setRecargar(true)) : setForm({
+                            nombre: "",
+                            sector: "",
+                            salida: "",
+                            llegada: "",
+                            maquinista: "",
+                            detalles: ""
+                        })
+                    }} />
+            </div>
+
+
 
         </form>
     );
