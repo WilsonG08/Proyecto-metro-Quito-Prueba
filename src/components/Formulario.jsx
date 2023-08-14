@@ -4,14 +4,15 @@ import { v4 as uuidv4 } from 'uuid';
 import Mensajes from "./Mensajes";
 import { useAlert } from 'react-alert'
 
-const Formulario = ({ setEstado, idMetro }) => {
+const Formulario = ({ setEstado, idMetro, estado }) => {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const alert = useAlert()
     const [error, setError] = useState(false);
     const [mensaje, setMensaje] = useState(false);
     const [cancelar, setCancelar] = useState(false);
-    const [metroBd, setMetroBd] = useState();
+    const [rutas, setRutas] = useState([])
     const [recargar, setRecargar] = useState(false);
+    const [validation, setValidation] = useState(false);
     const [form, setForm] = useState({
         nombre: "",
         sector: "",
@@ -35,9 +36,10 @@ const Formulario = ({ setEstado, idMetro }) => {
             (async function () {
                 try {
                     const respuesta = await fetch(`https://64d01a7dffcda80aff526884.mockapi.io/metro/${idMetro}`);
-                    setMetroBd(respuesta);
                     const data = await respuesta.json();
                     setForm(data);
+                    console.log([data])
+                    setMetroBd([data]);
                     Object.keys(data).forEach(key => {
                         setValue(key, data[key]);
                     });
@@ -48,12 +50,43 @@ const Formulario = ({ setEstado, idMetro }) => {
         }
     }, [idMetro, setValue]);
 
+    useEffect(() => {
+        if (estado || rutas.length >= 0) {
+            (async function () {
+                try {
+                    //LLamar a la API
+                    const respuesta = await (await fetch("https://64d01a7dffcda80aff526884.mockapi.io/metro")).json()
+                    //Cargar la info de rutas por medio de setrutas
+                    setRutas(respuesta)
+                    console.log("petición", respuesta);
+                }
+                catch (error) {
+                    //Mostramos mensajes de error
+                    console.log(error);
+                }
+            })()
+        }
+    }, [estado])
+
     const handleChange = (e) => {
+        let foundDuplicate = false;
+
+        if (!estado) {
+            rutas.forEach((elemet) => {
+                if (elemet.nombre === e.target.value) {
+                    foundDuplicate = true;
+                }
+            });
+        }
+
+        setValidation(foundDuplicate);
+
         setForm({
             ...form,
             [e.target.name]: e.target.value
         });
     }
+
 
     const onSubmit = async () => {
 
@@ -118,6 +151,7 @@ const Formulario = ({ setEstado, idMetro }) => {
         }
     }
 
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             {/* {error && <Mensajes tipo="bg-red-900">"Existen campos vacíos"</Mensajes>}
@@ -125,6 +159,7 @@ const Formulario = ({ setEstado, idMetro }) => {
 
             <div>
                 <label className='text-gray-700 uppercase font-bold text-sm'>Nombre: </label>
+
                 <input
                     id='nombre'
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
@@ -132,15 +167,16 @@ const Formulario = ({ setEstado, idMetro }) => {
                     {...register('nombre', {
                         required: true,
                         maxLength: 25,
+                        pattern: /^(?!\s*$)[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s!@#$%^&*()_+=[\]{}|;:'",<.>?/~`-]+$/
                     })}
-                    
                     value={form.nombre || ""}
                     onChange={handleChange}
                 />
-                {errors.nombre?.type === 'required' && form.nombre === "" && <small style={{ color: 'red' }}>El campo no puede estar vacio</small>}
+                {errors.nombre?.type === 'required' && form.nombre === "" && <small style={{ color: 'red' }}>El campo no puede estar vacío</small>}
                 {errors.nombre?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 25</small>}
-                {errors.nombre?.type === 'maxLength' && <small style={{ color: 'red' }}>El máximo de caracteres es 25</small>}
+                {validation && errors.nombre?.type !== 'required' && <small style={{ color: 'red' }}>Esta ruta ya existe</small>}
             </div>
+
 
             <div>
                 <label className='text-gray-700 uppercase font-bold text-sm'>Sector: </label>

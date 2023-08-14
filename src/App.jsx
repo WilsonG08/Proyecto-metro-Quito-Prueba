@@ -34,7 +34,7 @@ function App() {
             <hr className="w-80 border border-gray-400" />
           </div>
           <div className='mt-10'>
-            <Formulario setEstado={setEstado} idMetro={idMetro} />
+            <Formulario setEstado={setEstado} idMetro={idMetro} estado={estado} />
           </div>
         </div>
 
