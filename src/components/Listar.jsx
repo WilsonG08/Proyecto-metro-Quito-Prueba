@@ -7,6 +7,8 @@ import { useEffect } from 'react'
 const Listar = ({ estado,setIdmetro }) => {
     const alert = useAlert()
     const [rutas, setRutas] = useState([])
+    const [recargar, setRecargar] = useState(false);
+
 //Funcion autoejecutable
     useEffect(() => {
         if (estado || rutas.length >= 0) {
@@ -25,6 +27,14 @@ const Listar = ({ estado,setIdmetro }) => {
             })()
         }
     }, [estado])
+
+    useEffect(() => {
+        if (recargar) {
+            setTimeout(() => {
+                window.location.reload(); // Recargar la página después de mostrar la alerta
+            },500);
+        }
+    }, [recargar])
 
     const handleDelete = async (id) => {
         try {
@@ -66,7 +76,7 @@ const Listar = ({ estado,setIdmetro }) => {
                                     <button className='bg-sky-900 text-white px-6 py-1 rounded-full'
                                         onClick={() => { setIdmetro(ruta.id) }}
                                     >Actualizar</button>
-                                    <button className='bg-red-900 text-white px-6 py-1 rounded-full' onClick={() => { handleDelete(ruta.id) }}
+                                    <button className='bg-red-900 text-white px-6 py-1 rounded-full' onClick={() => { handleDelete(ruta.id), setRecargar(true) }}
                                     >Eliminar</button>
                                 </div>
                             </div>

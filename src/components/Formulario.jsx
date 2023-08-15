@@ -25,7 +25,7 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
         if (recargar) {
             setTimeout(() => {
                 window.location.reload(); // Recargar la página después de mostrar la alerta
-            }, 2000);
+            }, 500);
         }
     }, [recargar])
 
