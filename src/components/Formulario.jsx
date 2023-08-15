@@ -39,7 +39,6 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
                     const data = await respuesta.json();
                     setForm(data);
                     console.log([data])
-                    setMetroBd([data]);
                     Object.keys(data).forEach(key => {
                         setValue(key, data[key]);
                     });
@@ -71,7 +70,7 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
     const handleChange = (e) => {
         setForm({
             ...form,
-            [e.target.name]: e.target.value.trim()
+            [e.target.name]: e.target.value
         });
     }
 
@@ -85,11 +84,13 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
             }, 1000);
             return;
         }
-    
-        const isDuplicate = rutas.some((element) => element.nombre.toLowerCase() === form.nombre.toLowerCase()); // Comparación en minúsculas
-        if (isDuplicate) {
-            setValidation(true);
-            return;
+
+        if (!form.id) {
+            const isDuplicate = rutas.some((element) => element.nombre.toLowerCase() === form.nombre.toLowerCase());
+            if (isDuplicate) {
+                setValidation(true);
+                return;
+            }
         }
         //Cambio
         // Aplicar trim a cada valor en el objeto form
@@ -100,7 +101,6 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
         //cometarios
         try {
             if (form.id) {
-                console.log("SOY METRO", metroBd)
                 const url = `https://64d01a7dffcda80aff526884.mockapi.io/metro/${form.id}`;
                 await fetch(url, {
                     method: 'PUT',
