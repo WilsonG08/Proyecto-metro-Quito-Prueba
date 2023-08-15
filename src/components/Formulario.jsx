@@ -9,7 +9,7 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
     const alert = useAlert()
     const [error, setError] = useState(false);
     const [mensaje, setMensaje] = useState(false);
-    const [cancelar, setCancelar] = useState(false);
+    const [nombreReadOnly, setNombreReadOnly] = useState(false);
     const [rutas, setRutas] = useState([])
     const [recargar, setRecargar] = useState(false);
     const [validation, setValidation] = useState(false);
@@ -42,6 +42,8 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
                     Object.keys(data).forEach(key => {
                         setValue(key, data[key]);
                     });
+                    setNombreReadOnly(true); 
+
                 } catch (error) {
                     console.log(error);
                 }
@@ -160,10 +162,11 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
                     id='nombre'
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     type="text"
+                    readOnly={nombreReadOnly}
                     {...register('nombre', {
                         required: true,
                         maxLength: 25,
-                        pattern: /^(?!\s*$)[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s!@#$%^&*()_+=[\]{}|;:'",<.>?/~`-]+$/
+                        //pattern: /^(?!\s*$)[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s!@#$%^&*()_+=[\]{}|;:'",<.>?/~`-]+$/
                     })}
                     value={form.nombre || ""}
                     onChange={handleChange}
