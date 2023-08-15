@@ -92,7 +92,6 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
     const onSubmit = async () => {
 
         // Comprobar si hay errores en los campos del formulario
-
         if (Object.values(form).includes("")) {
             setError(true);
             setTimeout(() => {
@@ -100,6 +99,11 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
             }, 1000);
             return;
         }
+
+        // Aplicar trim a cada valor en el objeto form
+        const trimmedForm = Object.fromEntries(
+            Object.entries(form).map(([key, value]) => [key, value.trim()])
+        );
 
         //cometarios
         try {
