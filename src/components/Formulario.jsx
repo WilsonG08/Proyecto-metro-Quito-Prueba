@@ -100,6 +100,7 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
             return;
         }
 
+        //Cambio
         // Aplicar trim a cada valor en el objeto form
         const trimmedForm = Object.fromEntries(
             Object.entries(form).map(([key, value]) => [key, value.trim()])
@@ -113,7 +114,7 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
                 const url = `https://64d01a7dffcda80aff526884.mockapi.io/metro/${form.id}`;
                 await fetch(url, {
                     method: 'PUT',
-                    body: JSON.stringify(form),
+                    body: JSON.stringify(trimmedForm), // Usar el objeto con valores trim, cambio
                     headers: { 'Content-Type': 'application/json' }
                 });
                 setEstado(true);
@@ -130,7 +131,7 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
                 form.id = uuidv4();
                 await fetch(url, {
                     method: 'POST',
-                    body: JSON.stringify(form).trim(),
+                    body: JSON.stringify(trimmedForm), // Usar el objeto con valores trim, cambio
                     headers: { 'Content-Type': 'application/json' }
                 });
                 setMensaje(true);
