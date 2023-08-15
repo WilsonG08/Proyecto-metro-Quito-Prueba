@@ -85,8 +85,8 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
             }, 1000);
             return;
         }
-
-        const isDuplicate = rutas.some((element) => element.nombre.toLowerCase() === form.nombre.toLowerCase());
+    
+        const isDuplicate = rutas.some((element) => element.nombre.toLowerCase() === form.nombre.toLowerCase()); // Comparación en minúsculas
         if (isDuplicate) {
             setValidation(true);
             return;
