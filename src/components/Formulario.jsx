@@ -73,7 +73,8 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
 
         if (!estado) {
             rutas.forEach((elemet) => {
-                if (elemet.nombre === e.target.value) {
+                // cambio de espacios
+                if (elemet.nombre === e.target.value.trim) {
                     foundDuplicate = true;
                 }
             });
