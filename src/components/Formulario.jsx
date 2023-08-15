@@ -58,7 +58,7 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
                     const respuesta = await (await fetch("https://64d01a7dffcda80aff526884.mockapi.io/metro")).json()
                     //Cargar la info de rutas por medio de setrutas
                     setRutas(respuesta)
-                    console.log("petición", respuesta);
+                    console.log("===============", respuesta);
                 }
                 catch (error) {
                     //Mostramos mensajes de error
@@ -69,29 +69,15 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
     }, [estado])
 
     const handleChange = (e) => {
-        let foundDuplicate = false;
-
-        if (!estado) {
-            rutas.forEach((elemet) => {
-                // cambio de espacios
-                if (elemet.nombre === e.target.value.trim) {
-                    foundDuplicate = true;
-                }
-            });
-        }
-
-        setValidation(foundDuplicate);
-
         setForm({
             ...form,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value.trim()
         });
     }
 
 
     const onSubmit = async () => {
 
-        // Comprobar si hay errores en los campos del formulario
         if (Object.values(form).includes("")) {
             setError(true);
             setTimeout(() => {
@@ -100,6 +86,11 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
             return;
         }
 
+        const isDuplicate = rutas.some((element) => element.nombre.toLowerCase() === form.nombre.toLowerCase());
+        if (isDuplicate) {
+            setValidation(true);
+            return;
+        }
         //Cambio
         // Aplicar trim a cada valor en el objeto form
         const trimmedForm = Object.fromEntries(
@@ -109,7 +100,6 @@ const Formulario = ({ setEstado, idMetro, estado }) => {
         //cometarios
         try {
             if (form.id) {
-                setCancelar(true);
                 console.log("SOY METRO", metroBd)
                 const url = `https://64d01a7dffcda80aff526884.mockapi.io/metro/${form.id}`;
                 await fetch(url, {
